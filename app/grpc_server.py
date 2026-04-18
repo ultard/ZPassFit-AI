@@ -8,19 +8,18 @@ import threading
 
 import grpc
 
-from app.predictor import ChurnPredictor
+from app.churn_predictor import ChurnPredictor
 from app.proto import prediction_pb2, prediction_pb2_grpc
 
 
 class PredictionService(prediction_pb2_grpc.PredictionServiceServicer):
-    def __init__(self, predictor: ChurnPredictor) -> None:
-        self._predictor = predictor
+    def __init__(self, churn_predictor: ChurnPredictor) -> None:
+        self.churn_predictor = churn_predictor
 
-    def Predict(
+    def predict_churn(
         self,
-        request: prediction_pb2.PredictRequest,
-        context: grpc.ServicerContext,
-    ) -> prediction_pb2.PredictResponse:
+        request: prediction_pb2.PredictChurnRequest
+    ) -> prediction_pb2.PredictChurnResponse:
         payload = {
             "gender": request.gender,
             "age": request.age,
@@ -33,12 +32,14 @@ class PredictionService(prediction_pb2_grpc.PredictionServiceServicer):
             "membership_duration_days": request.membership_duration_days,
             "membership_days_to_expire": request.membership_days_to_expire,
         }
+
         if request.HasField("engagement_score"):
             payload["engagement_score"] = request.engagement_score
-        prediction, probability = self._predictor.predict(payload)
-        return prediction_pb2.PredictResponse(
+
+        prediction, probability = self.churn_predictor.predict(payload)
+        return prediction_pb2.PredictChurnResponse(
             prediction=prediction,
-            churn_probability=probability,
+            probability=probability
         )
 
 
@@ -47,10 +48,10 @@ def serve() -> None:
     port = os.getenv("GRPC_PORT", "50051")
     shutdown_grace = float(os.getenv("GRPC_SHUTDOWN_GRACE_SECONDS", "5"))
 
-    predictor = ChurnPredictor()
+    churn_predictor = ChurnPredictor()
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=4))
     prediction_pb2_grpc.add_PredictionServiceServicer_to_server(
-        PredictionService(predictor),
+        PredictionService(churn_predictor),
         server,
     )
     server.add_insecure_port(f"{host}:{port}")

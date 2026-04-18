@@ -34,17 +34,17 @@ class PredictionServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.Predict = channel.unary_unary(
-                '/prediction.PredictionService/Predict',
-                request_serializer=app_dot_proto_dot_prediction__pb2.PredictRequest.SerializeToString,
-                response_deserializer=app_dot_proto_dot_prediction__pb2.PredictResponse.FromString,
+        self.PredictChurn = channel.unary_unary(
+                '/prediction.PredictionService/PredictChurn',
+                request_serializer=app_dot_proto_dot_prediction__pb2.PredictChurnRequest.SerializeToString,
+                response_deserializer=app_dot_proto_dot_prediction__pb2.PredictChurnResponse.FromString,
                 _registered_method=True)
 
 
 class PredictionServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def Predict(self, request, context):
+    def PredictChurn(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -53,10 +53,10 @@ class PredictionServiceServicer(object):
 
 def add_PredictionServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Predict': grpc.unary_unary_rpc_method_handler(
-                    servicer.Predict,
-                    request_deserializer=app_dot_proto_dot_prediction__pb2.PredictRequest.FromString,
-                    response_serializer=app_dot_proto_dot_prediction__pb2.PredictResponse.SerializeToString,
+            'PredictChurn': grpc.unary_unary_rpc_method_handler(
+                    servicer.PredictChurn,
+                    request_deserializer=app_dot_proto_dot_prediction__pb2.PredictChurnRequest.FromString,
+                    response_serializer=app_dot_proto_dot_prediction__pb2.PredictChurnResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -70,7 +70,7 @@ class PredictionService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def Predict(request,
+    def PredictChurn(request,
             target,
             options=(),
             channel_credentials=None,
@@ -83,9 +83,9 @@ class PredictionService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/prediction.PredictionService/Predict',
-            app_dot_proto_dot_prediction__pb2.PredictRequest.SerializeToString,
-            app_dot_proto_dot_prediction__pb2.PredictResponse.FromString,
+            '/prediction.PredictionService/PredictChurn',
+            app_dot_proto_dot_prediction__pb2.PredictChurnRequest.SerializeToString,
+            app_dot_proto_dot_prediction__pb2.PredictChurnResponse.FromString,
             options,
             channel_credentials,
             insecure,

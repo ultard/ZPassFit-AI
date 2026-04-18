@@ -4,7 +4,7 @@ from typing import ClassVar as _ClassVar, Optional as _Optional
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
-class PredictRequest(_message.Message):
+class PredictChurnRequest(_message.Message):
     __slots__ = ("gender", "age", "visits_per_week", "visits_last_7d", "visits_last_4w", "visits_prev_4w", "days_since_last_visit", "membership_price", "membership_duration_days", "membership_days_to_expire", "engagement_score")
     GENDER_FIELD_NUMBER: _ClassVar[int]
     AGE_FIELD_NUMBER: _ClassVar[int]
@@ -30,10 +30,10 @@ class PredictRequest(_message.Message):
     engagement_score: float
     def __init__(self, gender: _Optional[str] = ..., age: _Optional[int] = ..., visits_per_week: _Optional[float] = ..., visits_last_7d: _Optional[int] = ..., visits_last_4w: _Optional[int] = ..., visits_prev_4w: _Optional[int] = ..., days_since_last_visit: _Optional[int] = ..., membership_price: _Optional[float] = ..., membership_duration_days: _Optional[int] = ..., membership_days_to_expire: _Optional[int] = ..., engagement_score: _Optional[float] = ...) -> None: ...
 
-class PredictResponse(_message.Message):
-    __slots__ = ("prediction", "churn_probability")
+class PredictChurnResponse(_message.Message):
+    __slots__ = ("prediction", "probability")
     PREDICTION_FIELD_NUMBER: _ClassVar[int]
-    CHURN_PROBABILITY_FIELD_NUMBER: _ClassVar[int]
+    PROBABILITY_FIELD_NUMBER: _ClassVar[int]
     prediction: int
-    churn_probability: float
-    def __init__(self, prediction: _Optional[int] = ..., churn_probability: _Optional[float] = ...) -> None: ...
+    probability: float
+    def __init__(self, prediction: _Optional[int] = ..., probability: _Optional[float] = ...) -> None: ...
