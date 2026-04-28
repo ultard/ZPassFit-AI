@@ -5,6 +5,7 @@ import logging
 import os
 import signal
 import threading
+from typing import Any
 
 import grpc
 
@@ -16,11 +17,12 @@ class PredictionService(prediction_pb2_grpc.PredictionServiceServicer):
     def __init__(self, churn_predictor: ChurnPredictor) -> None:
         self.churn_predictor = churn_predictor
 
-    def predict_churn(
+    def PredictChurn(
         self,
-        request: prediction_pb2.PredictChurnRequest
+        request: prediction_pb2.PredictChurnRequest,
+        context: grpc.ServicerContext,
     ) -> prediction_pb2.PredictChurnResponse:
-        payload = {
+        payload: dict[str, Any] = {
             "gender": request.gender,
             "age": request.age,
             "visits_per_week": request.visits_per_week,
